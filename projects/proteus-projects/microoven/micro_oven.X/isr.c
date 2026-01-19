@@ -1,5 +1,5 @@
 #include <xc.h>
-#include "main.h"
+
 
 void __interrupt() isr(void)
 {
@@ -7,11 +7,11 @@ void __interrupt() isr(void)
     
     if (TMR2IF == 1)
     {    
-        if (++count == 1250) // 1sec
+        if (++count == 20000) // 1sec
         {
             count = 0;
             
-            LED1 = !LED1;
+           
         }
         
         TMR2IF = 0;

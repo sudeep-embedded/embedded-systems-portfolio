@@ -16,11 +16,14 @@
 #define START_MODE         0x60
 #define BAR                0xFF
 
+#define MICRO_RESET_FLAG   0x31
+#define RESET_NOTHING      0xFF
 
 
 
 void display_power_screen(void);
 void display_modes(void);
+void set_time(unsigned char key, unsigned char reset_flag);
 
 #endif	/* MICRO_OVEN_H */
 
