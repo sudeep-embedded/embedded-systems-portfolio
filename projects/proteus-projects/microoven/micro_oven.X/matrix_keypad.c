@@ -12,7 +12,8 @@ void init_matrix_keypad(void)
     MATRIX_KEYPAD_ROW_PORT_DDR = MATRIX_KEYPAD_ROW_PORT_DDR & 0xF0; // TRISD = TRISD & 0xF0 -> (TRISD0 to TRISD3)
     
     /* Enabling PORTB Pullups */
-    nRBPU = 0;
+   OPTION_REGbits.nRBPU = 1;
+
     
     /* Making all the Rows HIGH to start with */
     ROW1 = HI;

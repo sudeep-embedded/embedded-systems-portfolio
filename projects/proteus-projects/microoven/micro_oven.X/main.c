@@ -20,65 +20,61 @@ static void init_config(void) {
     
 }
 
- void main(void)
+void main(void)
 {
     init_config();
+
     unsigned char screen_flag = POWER_SCREEN;
     unsigned char key;
-    unsigned char reset_flag;
+    unsigned char reset_flag = 0;
+
     while (1)
     {
         key = read_matrix_keypad(STATE);
+
         if (screen_flag == MENU_SCREEN)
-  {
-    if (key == 1)
-    {
-        screen_flag = MICRO_MODE;
-        clear_screen();
-        clcd_print("Power = 900W", LINE2(2));
-        __delay_ms(3000);
-        clear_screen();
-        reset_flag = MICRO_RESET_FLAG;
-        
-    }
-    else if (key == 2)
-    {
-        screen_flag = GRILL_MODE;
-        clear_screen();
-    }
-    else if (key == 3)
-    {
-        screen_flag = CONVECTION_MODE;
-        clear_screen();
-    }
-    else if (key == 4)
-    {
-        screen_flag = START_MODE;
-        clear_screen();
-    }
-  }
-}
-        switch( screen_flag)
-  {
-    
-    case POWER_SCREEN :
+        {
+            if (key == 1)
+            {
+                screen_flag = MICRO_MODE;
+                clear_screen();
+                clcd_print("Power = 900W", LINE2(2));
+                __delay_ms(3000);
+                clear_screen();
+                reset_flag = MICRO_RESET_FLAG;
+            }
+            else if (key == 2)
+            {
+                screen_flag = GRILL_MODE;
+                clear_screen();
+            }
+            else if (key == 3)
+            {
+                screen_flag = CONVECTION_MODE;
+                clear_screen();
+            }
+            else if (key == 4)
+            {
+                screen_flag = START_MODE;
+                clear_screen();
+            }
+        }
+
+        switch (screen_flag)
+        {
+            case POWER_SCREEN:
                 display_power_screen();
                 clear_screen();
                 screen_flag = MENU_SCREEN;
                 break;
 
-    case MENU_SCREEN :
-        
+            case MENU_SCREEN:
                 display_modes();
                 break;
-    
-    case MICRO_MODE :
+
+            case MICRO_MODE:
                 set_time(key, reset_flag);
                 break;
-                
-                
-                
-  } 
-        
+        }
+    }
 }
- 
