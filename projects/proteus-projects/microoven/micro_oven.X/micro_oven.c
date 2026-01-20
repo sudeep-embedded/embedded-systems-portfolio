@@ -5,6 +5,7 @@
 
 
 unsigned char min, sec;
+unsigned char temp;
  extern unsigned char screen_flag;
 
 
@@ -44,11 +45,13 @@ void set_time(unsigned char key, unsigned char reset_flag)
     static unsigned char blink_pos = 0;
     static unsigned char key_count = 0;
     static unsigned char delay, display_blank;
-    if(reset_flag == MICRO_RESET_FLAG  )
+    if(reset_flag == RESET_FLAG  )
     {
         sec = 0;
         min = 0;
         key = 0;
+        key_count = 0;
+        blink_pos = 0;
     }
     clcd_print("SET TIME (MM:SS)", LINE1(0));
     clcd_print("TIME:", LINE2(0));
@@ -126,6 +129,62 @@ void set_time(unsigned char key, unsigned char reset_flag)
     
  }
 
+void set_temp(unsigned char key ,unsigned char reset_flag)
+{
+    static unsigned char key_count = 0;
+    static unsigned char delay, display_blank;
+    if(reset_flag == RESET_FLAG  )
+    {
+        temp = 0;
+        key = 0;
+        key_count = 0;
+        blink_pos = 0;
+    }
+     if(delay++ == 10)
+    {
+        delay = 0;
+        display_blank = !display_blank;
+    }
+   
+    clcd_print("SET Temp (<*C>", LINE1(0));
+    clcd_print("Temp=", LINE2(0));
+    clcd_print("*:CLEAR #:ENTER", LINE4(0));  
+    
+    
+    if (key != '*' && key != '#' && key != ALL_RELEASED  )
+    {
+        key_count++;
+        if(key_count <= 3)
+        {
+           temp = temp * 10 + key;
+        }
+        
+    }
+    else if ( key == '*')
+    {
+        temp = 0;
+        }
+    else if(key == '#')
+    {
+      
+        
+    } 
+    
+     if(display_blank)
+    {
+      clcd_putch(' ', LINE2(7));  
+      clcd_putch(' ', LINE2(8));
+      clcd_putch(' ', LINE2(9));  
+    }
+    else 
+    {
+       clcd_putch( temp / 100 + '0', LINE2(7));
+       clcd_putch( temp % 10 + '0', LINE2(8));
+       clcd_putch(( temp % 10 + '0', LINE2(9)));
+       
+    }
+}
+
 void display_time(void)
 {
     clcd_print("TIME = ", LINE1(1));
@@ -135,8 +194,8 @@ void display_time(void)
     clcd_putch( sec / 10 + '0', LINE1(12));
     clcd_putch( sec % 10 + '0', LINE1(13));
     clcd_print("4.START/RESUME", LINE2(2));
-    clcd_print("4.PAUSE", LINE3(2));
-    clcd_print("4.STOP", LINE4(2));
+    clcd_print("5.PAUSE", LINE3(2));
+    clcd_print("6.STOP", LINE4(2));
     
     if (min == 0 && sec == 0)
     {

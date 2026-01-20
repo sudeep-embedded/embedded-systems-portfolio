@@ -43,16 +43,18 @@ void main(void)
                 clcd_print("Power = 900W", LINE2(2));
                 __delay_ms(3000);
                 clear_screen();
-                reset_flag = MICRO_RESET_FLAG;
+                reset_flag = RESET_FLAG;
             }
             else if (key == 2)
             {
                 screen_flag = GRILL_MODE;
+                reset_flag = RESET_FLAG;
                 clear_screen();
             }
             else if (key == 3)
             {
                 screen_flag = CONVECTION_MODE;
+                reset_flag = RESET_FLAG;
                 clear_screen();
             }
             else if (key == 4)
@@ -61,6 +63,33 @@ void main(void)
                 clear_screen();
             }
         }
+        else if(screen_flag == DISPLAY_TIME)
+        {
+            /*if(key == 4)
+            {
+                
+            }*/
+             if(key == 5)
+            {
+                screen_flag = PAUSE;
+            }
+            else if(key == 6)
+            {
+                screen_flag = STOP; 
+            }
+        }
+        else if(screen_flag == PAUSE)
+        {
+             if(key == 4)
+            {
+                TMR2ON = 1;
+                FAN = 1;
+                screen_flag = DISPLAY_TIME;
+                
+            }
+            
+        }
+        
 
         switch (screen_flag)
         {
@@ -81,6 +110,34 @@ void main(void)
             case DISPLAY_TIME :
                 display_time();
                 break;
+            
+            case GRILL_MODE:
+                set_time(key, reset_flag);
+                break;    
+                
+            case CONVECTION_MODE : 
+                set_temp(key , reset_flag);
+                
+            
+            case PAUSE:
+                TMR2ON = 0;
+                FAN = 0;
+                break;
+
+            case STOP:
+                TMR2ON = 0;
+                FAN = 0;
+                clear_screen();
+                screen_flag = MENU_SCREEN;
+                break;   
+                
+                
+                
+                
+                
+                
+                
+                
         }
         reset_flag = RESET_NOTHING;
     }

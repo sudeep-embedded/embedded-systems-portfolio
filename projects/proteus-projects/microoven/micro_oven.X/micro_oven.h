@@ -18,10 +18,14 @@
 #define GRILL_MODE         0x40
 #define CONVECTION_MODE    0x50
 #define START_MODE         0x60
-#define BAR                0xFF
+
 #define DISPLAY_TIME       0x70
 
-#define MICRO_RESET_FLAG   0x31
+#define PAUSE              0x80
+#define STOP               0x90
+
+#define BAR                0xFF
+#define RESET_FLAG         0x31
 #define RESET_NOTHING      0xFF
 
 
@@ -29,7 +33,9 @@
 void display_power_screen(void);
 void display_modes(void);
 void set_time(unsigned char key, unsigned char reset_flag);
+void set_temp(unsigned char key ,unsigned char reset_flag);
 void display_time(void);
+
 
 #endif	/* MICRO_OVEN_H */
 
