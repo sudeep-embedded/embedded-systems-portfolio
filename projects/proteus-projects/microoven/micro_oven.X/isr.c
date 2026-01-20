@@ -1,7 +1,7 @@
 #include <xc.h>
 
 extern unsigned char sec, min;
-
+extern unsigned char pre_heat;
 void __interrupt() isr(void)
 {
     static unsigned int count = 0;
@@ -24,7 +24,10 @@ void __interrupt() isr(void)
                 }
               
             }
-            
+            if(pre_heat > 0)
+            {
+                pre_heat--;
+            }
            
         }
         

@@ -35,6 +35,7 @@ void display_modes(void);
 void set_time(unsigned char key, unsigned char reset_flag);
 void set_temp(unsigned char key ,unsigned char reset_flag);
 void display_time(void);
+void heat_food(void);
 
 
 #endif	/* MICRO_OVEN_H */

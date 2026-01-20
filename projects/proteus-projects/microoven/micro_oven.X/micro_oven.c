@@ -7,7 +7,8 @@
 unsigned char min, sec;
 unsigned char temp;
  extern unsigned char screen_flag;
-
+ extern unsigned char reset_flag;
+unsigned char pre_heat;
 
 void display_power_screen(void )
 {
@@ -63,12 +64,12 @@ void set_time(unsigned char key, unsigned char reset_flag)
     if (key != '*' && key != '#' && key != ALL_RELEASED  )
     {
         key_count++;
-        if(key_count <= 2)
+        if(key_count <= 3)
         {
            sec = sec * 10 + key;
            blink_pos = 0;
         }
-        else if(key_count <= 4)
+        else if(key_count <= 5)
         {
             min = min * 10 + key;
             blink_pos =1;
@@ -138,9 +139,9 @@ void set_temp(unsigned char key ,unsigned char reset_flag)
         temp = 0;
         key = 0;
         key_count = 0;
-        blink_pos = 0;
+        
     }
-     if(delay++ == 10)
+     if(delay++ == 5)
     {
         delay = 0;
         display_blank = !display_blank;
@@ -154,7 +155,7 @@ void set_temp(unsigned char key ,unsigned char reset_flag)
     if (key != '*' && key != '#' && key != ALL_RELEASED  )
     {
         key_count++;
-        if(key_count <= 3)
+        if(key_count <= 4)
         {
            temp = temp * 10 + key;
         }
@@ -163,11 +164,32 @@ void set_temp(unsigned char key ,unsigned char reset_flag)
     else if ( key == '*')
     {
         temp = 0;
+        key_count = 0;
         }
     else if(key == '#')
     {
+        if(temp > 180)
+        {
+          temp = 180;  
+        }
+      clear_screen();
+      pre_heat = 60;
+      TMR2ON = 1;
       
-        
+      clcd_print("Pre-Heating", LINE1(3));
+      clcd_print("Time Rem:", LINE3(0));
+      clcd_putch('s', LINE3(12));
+      while(pre_heat)
+      {
+       clcd_putch( pre_heat / 100 + '0', LINE3(9));
+       clcd_putch( (pre_heat/10) % 10 + '0', LINE3(10));
+       clcd_putch(( pre_heat % 10) + '0', LINE3(11));  
+      } 
+      TMR2ON = 0;
+      clear_screen();
+      screen_flag = MICRO_MODE;
+      reset_flag = RESET_FLAG;
+      
     } 
     
      if(display_blank)
@@ -179,12 +201,11 @@ void set_temp(unsigned char key ,unsigned char reset_flag)
     else 
     {
        clcd_putch( temp / 100 + '0', LINE2(7));
-       clcd_putch( temp % 10 + '0', LINE2(8));
-       clcd_putch(( temp % 10 + '0', LINE2(9)));
+       clcd_putch( (temp/10) % 10 + '0', LINE2(8));
+       clcd_putch(( temp % 10) + '0', LINE2(9));
        
-    }
+    }   
 }
-
 void display_time(void)
 {
     clcd_print("TIME = ", LINE1(1));
@@ -211,5 +232,12 @@ void display_time(void)
         screen_flag = MENU_SCREEN;
         
     }
-    
+}
+void heat_food(void)
+{
+    sec = 30;
+    min = 0;
+    TMR2ON = 1;
+    FAN = 1;
+    screen_flag = DISPLAY_TIME; 
 }

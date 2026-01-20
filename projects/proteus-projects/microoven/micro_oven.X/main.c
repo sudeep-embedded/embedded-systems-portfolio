@@ -10,7 +10,7 @@
 
 #pragma config WDTE = OFF
 unsigned char screen_flag = POWER_SCREEN;
-
+extern unsigned char sec, min;
 
 static void init_config(void) {
     init_clcd();
@@ -65,10 +65,15 @@ void main(void)
         }
         else if(screen_flag == DISPLAY_TIME)
         {
-            /*if(key == 4)
+            if(key == 4)
             {
-                
-            }*/
+             sec = sec + 30;
+             if(sec > 59)
+             {
+                 min++;
+                 sec = sec - 60;
+             }
+            }
              if(key == 5)
             {
                 screen_flag = PAUSE;
@@ -117,8 +122,14 @@ void main(void)
                 
             case CONVECTION_MODE : 
                 set_temp(key , reset_flag);
-                
+                break;
             
+            case START_MODE : 
+                heat_food();
+                break;
+                
+                
+                
             case PAUSE:
                 TMR2ON = 0;
                 FAN = 0;
