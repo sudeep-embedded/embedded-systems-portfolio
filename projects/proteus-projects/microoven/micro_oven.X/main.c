@@ -9,12 +9,14 @@
 #include "timers.h"
 
 #pragma config WDTE = OFF
+unsigned char screen_flag = POWER_SCREEN;
 
 
 static void init_config(void) {
     init_clcd();
     init_matrix_keypad();
     init_timer2();
+    FAN_DDR = 0;
     PEIE = 1;
     GIE = 1;
     
@@ -24,7 +26,7 @@ void main(void)
 {
     init_config();
 
-    unsigned char screen_flag = POWER_SCREEN;
+    
     unsigned char key;
     unsigned char reset_flag = 0;
 
@@ -75,6 +77,11 @@ void main(void)
             case MICRO_MODE:
                 set_time(key, reset_flag);
                 break;
+            
+            case DISPLAY_TIME :
+                display_time();
+                break;
         }
+        reset_flag = RESET_NOTHING;
     }
 }
