@@ -1,0 +1,18 @@
+# ===== MPLAB X generated files =====
+**/build/
+**/dist/
+**/debug/
+**/nbproject/private/
+Makefile
+
+# ===== Compiler outputs =====
+*.hex
+*.elf
+*.cof
+*.map
+*.lst
+*.o
+
+# ===== OS junk =====
+.DS_Store
+Thumbs.db
